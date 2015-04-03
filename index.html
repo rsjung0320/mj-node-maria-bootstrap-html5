@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>niAjax Test Hello niAjax</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <h1>niAjax Test Hello niAjax</h1>
+    <h3>niAjax [next innovation Ajax]</h3>
+
+    <div id='ajax'> <input type='button' value ='ajax test'>  </div>
+    <input type='file' id='file'>
+    <div id='download'> <input type='button' value ='file Download'>  </div>
+    <div id='result'> </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/niAjax.js"></script>
+
+    <!-- 일반 ajax 통신 할 때 사용 하는 -->
+    <script>
+      // 아래의 config는 글로벌 변수로 선언하여 다음에 호출할 때 매번 적지 않고 사용하도록 한다.
+      // config 설정
+      var loginConfig = {
+        url : 'http://cors-test.appspot.com/test',
+        type : 'post',
+        dataType: 'json'
+      };
+
+      $('#ajax').click(function() {
+        
+        // 화면에서 받은 정보를 가져와 구성한다.
+        // 아래의 예제는 값을 가져왔다고 가정한다.
+        var data = {id:'rsjung', pw:'1234'};
+
+        // $.niAjax 3번 때 param은 아무것도 넣지 않으면 기본적으로 json이고, formData로 넘기고 싶다면 'f' 혹은 'F'로 넘기면 된다.
+        // $.niAjax(loginConfig, data).then(
+        $.niAjax(loginConfig, data, 'f').then(
+          function(success)
+          {
+            $('#result').html('success!! </br> Message from server : ' + success);
+          }, 
+          function(fail)
+          {
+            $('#result').html('fail!! </br> Message from server : ' + fail);
+          }
+        );
+      });
+    </script>
+    <!-- file upload 관련 -->
+    <script>
+      var fileConfilg = {
+        url : 'http://192.168.13.165:3303/upload',
+        type : 'post',
+        dataType: 'json'
+      };
+
+      $('#file').on('change', function() {
+
+        file = $('#file').prop("files")[0];
+        // console.log('file : ', file);
+
+        var data = {files: file};
+
+        // 파일은 필히 formData로 보낸다.
+        $.niAjax(fileConfilg, data, 'f').then(
+          function(success)
+          {
+            $('#result').html('success!! </br> Message from server : status ' + success);
+          }, 
+          function(fail)
+          {
+            $('#result').html('fail!! </br> Message from server : ' + fail);
+          }
+        );
+      });
+    </script>
+
+    <!-- file download 관련 -->
+    <script>
+    //   // var fileDownloadConfilg = {
+    //   //   url : 'http://192.168.13.165:3303/download/',
+    //   //   type : 'GET'
+    //   //   // ,
+    //   //   // dataType: 'blob'
+    //   // };
+
+    //   $('#download').click(function() {
+        
+    //     // 화면에서 받은 정보를 가져와 구성한다.
+    //     // 아래의 예제는 값을 가져왔다고 가정한다.
+    //     // var data = {fileName:'123123.jpg'};
+
+    //     // $.niAjax 3번 때 param은 아무것도 넣지 않으면 기본적으로 json이고, formData로 넘기고 싶다면 'f' 혹은 'F'로 넘기면 된다.
+    //     // $.niAjax(loginConfig, data).then(
+    //     $.niAjax.download('http://192.168.13.165:3303/download/123123.jpg').then(function(success){
+    //       $('#result').html('success!! </br> Message from server : status ' + success);
+    //     }, function(fail){
+    //       $('#result').html('fail!! </br> Message from server : ' + fail);
+    //     });
+    //   });
+    </script>
+
+  </body>
+</html>
